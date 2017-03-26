@@ -57,3 +57,38 @@ your_name="tars"
 
 #     mv $name $realName
 # done 
+
+
+//sed
+for file in *.h
+do
+	# cat ${file} | sed 's/Sample/tars/'
+	# sed -i's/Sample/AAA/g' $file
+	sed -i 's/text/repalce_text/g' file
+done 
+
+#!/bin/bash
+#!/usr/bin/php
+
+# 修改模版文件的脚本
+for file in *.h
+do
+	sed -ig 's/Sample/tars/g' $file
+done 
+
+for file in *.cpp
+do
+	sed -ig 's/Sample/tars/g' $file
+done 
+
+#重命名文件
+for file in *
+do
+	# echo $file
+	name=${file}
+	# echo $name
+	realName=${name/Sample/tars} 
+    echo $realName
+
+    mv $name $realName
+done 
