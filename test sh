@@ -58,30 +58,31 @@ your_name="tars"
 #     mv $name $realName
 # done 
 
-
+#批量修改模版文件的脚本
+#!/bin/bash
 #!/bin/bash
 #!/usr/bin/php
 
-# 修改模版文件的脚本
 for file in *.h
 do
-	sed -ig 's/Sample/tars/g' $file
+	sed -i '' 's/Sample/Tars/g' $file
 done 
 
 for file in *.cpp
 do
-	sed -ig 's/Sample/tars/g' $file
+	sed -i '' 's/Sample/Tars/g' $file
 done 
 
-#重命名文件
+# #重命名文件
 for file in *
 do
 	# echo $file
 	name=${file}
 	# echo $name
-	realName=${name/Sample/tars} 
+	realName=${name/Sample/Tars} 
     echo $realName
 
     mv $name $realName
 done 
+
 
