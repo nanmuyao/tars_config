@@ -59,14 +59,6 @@ your_name="tars"
 # done 
 
 
-//sed
-for file in *.h
-do
-	# cat ${file} | sed 's/Sample/tars/'
-	# sed -i's/Sample/AAA/g' $file
-	sed -i 's/text/repalce_text/g' file
-done 
-
 #!/bin/bash
 #!/usr/bin/php
 
@@ -92,3 +84,4 @@ do
 
     mv $name $realName
 done 
+
