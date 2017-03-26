@@ -1,0 +1,59 @@
+#!/bin/bash
+#!/usr/bin/php
+
+your_name="tars"
+#echo $your_name
+
+# for skill in Ada Coffe Action Java; do
+# 	echo "I am good at ${skill}Script"
+# done
+
+# your_name="qinjx"
+# greeting="hello, "$your_name" !"
+# greeting_1="hello, ${your_name} !"
+
+#echo $greeting $greeting_1
+
+# string="abcd"
+# echo ${#string}
+
+# string="alibaba is a great company"
+# echo ${string:1:4}
+
+
+#查找字符串
+# string="alibaba is a great company"
+# echo $string
+# echo `expr index "$string" is`
+
+# string="alibaba is a great company"
+# echo `expr index "$string" a`
+
+
+
+# if `ps -ef | grep ssh`;  then echo hello; fi
+# 遍历本地文件
+# for file in *
+# do
+# 	# echo $file
+# 	name=${file%.*}
+# 	echo "file name is": $name
+# done
+
+# file_name="text.gif.bak.2012"
+# name=${file_name%.*}
+# name2=${file_name%%.*}
+# echo file name is: $name
+# echo file name is: $name2
+
+#重命名文件
+# for file in *
+# do
+# 	# echo $file
+# 	name=${file}
+# 	# echo $name
+# 	realName=${name/Sample/tars} 
+#     echo $realName
+
+#     mv $name $realName
+# done 
