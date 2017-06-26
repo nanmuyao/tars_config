@@ -1,0 +1,16 @@
+
+#移动文件夹及文件夹内的文件
+cp -f //Users/dragon/Documents/cocos2d-x-2.2.6/projects/SlotVampire/proj.android/libs/armeabi/libcocos2dcpp.so  /Users/dragon/Documents/cocos2d-x-2.2.6/projects/SlotVampire/project.android_studio/slotVampire/src/main/jniLibs/armeabi
+
+cp -Rf /Users/dragon/Documents/cocos2d-x-2.2.6/projects/SlotVampire/proj.android/assets  /Users/dragon/Documents/cocos2d-x-2.2.6/projects/SlotVampire/project.android_studio/slotVampire/src/main/
+
+# cp -u -v file1 file2
+
+#去安卓studio目录执行打包命令
+pwd
+cd ../
+cd project.android_studio
+./gradlew installDebug
+adb shell am start -n com.luckios.buffaloslots/com.luckios.buffaloslots.BuffaloSlots
+adb logcat
+pwd
