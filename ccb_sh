@@ -1,0 +1,82 @@
+################
+# create by hzq
+################
+#!/bin/bash
+#!/usr/bin/php
+
+# for file in *.h
+# do
+# 	sed -i '' 's/InviteLayer/SystemNotificationLayer/g' $file
+# done
+#
+# for file in *.cpp
+# do
+# 	sed -i '' 's/InviteLayer/SystemNotificationLayer/g' $file
+# done
+
+# #csv 文件的处理
+# for file in *.csv
+# do
+# 	sed -i '' 's/Inbox/FBCommunity/g' $file
+# done
+#
+# #设置游戏模式
+# for file in *.csv
+# do
+# 	sed -i '' 's/Game_Mode/exist_bonus_change_to_big_wild_uglyduck/g' $file
+# done
+
+# #重命名文件
+# for file in *
+# do
+# 	# echo $file
+# 	name=${file}
+# 	# echo $name
+# 	realName=${name/InviteLayer/SystemNotificationLayer}
+#     # echo $realName
+#     mv $name $realName
+# done
+
+rm -rf png.out
+rm -rf pngName.out
+
+grep "png" ZQCoinStoreLayer.ccb >> png.out
+# grep ".fnt" ZQCoinStoreLayer.ccb >> png.out
+
+# cat png.out | while read line
+# do
+# 		# echo $line
+# done
+
+cat png.out | while read line
+do        #逐行读取字符串
+    # new_str=$(echo $line | cut -d "<" -f1)		#我处理的方式为以空格分割字符串 取第一个
+		# echo -e $new_str >> new_Tsinghua.out      #写入到新的文本中 并自动换行
+		# echo "$line" | grep -o -P '(?<=Here).*(?=string)'
+		foo=$line
+		foo=${foo#*string>}
+		# echo "$foo"
+		foo=${foo%%</string>}
+		echo "$foo" >> pngName.out
+done
+
+sort pngName.out | uniq
+
+cat pngName.out | while read line
+do
+		#查找文件
+		file_name=$line
+		echo "$file_name"
+		ls -l|grep "$file_name"
+		r=$?
+		if [ $r == 1 ]; then
+		        echo "不存在此文件"
+						exit 0
+		elif [ $r == 0 ]; then
+						# foleName = $file_name
+						# move foleName pngFile
+						cp -Rf $file_name pngFile
+		        echo "存在此文件"
+						cp -Rf $file_name pngFile
+		fi
+done
