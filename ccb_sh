@@ -39,9 +39,12 @@
 
 rm -rf png.out
 rm -rf pngName.out
+rm -rf pngUniqName.out
+mkdir -p pngFile
 
-grep "png" ZQCoinStoreLayer.ccb >> png.out
-# grep ".fnt" ZQCoinStoreLayer.ccb >> png.out
+grep -n "png" ZQCoinStoreLayer.ccb >> png.out
+grep -n "\.fnt" ZQCoinStoreLayer.ccb >> png.out
+grep -n '\.plist' ZQCoinStoreLayer.ccb >> pngPlist.out
 
 # cat png.out | while read line
 # do
@@ -60,23 +63,31 @@ do        #逐行读取字符串
 		echo "$foo" >> pngName.out
 done
 
-sort pngName.out | uniq
+sort pngName.out | uniq > pngUniqName.out
 
-cat pngName.out | while read line
+cat pngUniqName.out | while read line
 do
 		#查找文件
 		file_name=$line
-		echo "$file_name"
+		# echo "$file_name"
 		ls -l|grep "$file_name"
 		r=$?
 		if [ $r == 1 ]; then
-		        echo "不存在此文件"
-						exit 0
+		        # echo "不存在此文件"
+						exit 1
 		elif [ $r == 0 ]; then
 						# foleName = $file_name
 						# move foleName pngFile
 						cp -Rf $file_name pngFile
-		        echo "存在此文件"
-						cp -Rf $file_name pngFile
+		        # echo "存在此文件"
 		fi
 done
+
+wc pngName.out
+wc pngUniqName.out
+
+
+
+# rm -rf png.out
+# rm -rf pngName.out
+# rm -rf pngUniqName.out
