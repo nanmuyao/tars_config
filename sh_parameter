@@ -1,0 +1,9 @@
+#! /bin/sh
+# test.sh
+echo "$# parameters";
+# echo "$@";
+# echo "$0"
+# echo "$1"
+if [[ $1 == 22 ]]; then
+  echo "is 22"
+fi
