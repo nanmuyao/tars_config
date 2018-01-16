@@ -37,8 +37,14 @@ def anylizeFile():
     for csd in csdList:
         #首先拷贝csd文件
         # print csd
-        shutil.copy(csd, dirPathDest)
-        file_object = open(csd, 'rb')
+        try:
+            shutil.copy(csd, dirPathDest)
+            file_object = open(csd, 'rb')
+        except IOError:
+            print "Error: 没有找到:" + csd
+        else:
+            print "找到文件并转移成功:" + csd
+
         for line in file_object:
             content = line.find(".png")
             if content != -1:
@@ -63,15 +69,15 @@ def anylizeFile():
                             # print("该目录当前不存在")
                             os.makedirs(dirPathDestTemp)
 
-                        print strContent
+                        # print strContent
                         # print dirPathDestTemp
                         # 拷贝csd文件中用到的图片到临时目录
                         try:
                             shutil.copy(strContent, dirPathDestTemp)
                         except IOError:
-                            print "Error: 没有找到文件或读取文件失败"
+                            print "Error: 没有找到:"+strContent
                         else:
-                            print "内容写入文件成功"
+                            print "找到文件并转移成功:"+strContent
                             # print "strContent:" + strContent
 
 
@@ -79,6 +85,7 @@ def anylizeFile():
     if os.path.isdir(dirPathDest):
         os.chmod(dirPathDest, stat.S_IRWXU)
         os.startfile(dirPathDest)
+
 
 
 anylizeFile()
