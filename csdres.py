@@ -20,6 +20,7 @@ csdList = ['ClubDetailMsg.csd', 'ClubPopUpMsg.csd', 'ClubRank.csd', 'InputClubId
 dirPathDest = "tempFile"
 
 def updateDir():
+
     #清理目录
     if os.path.exists(dirPathDest):
         shutil.rmtree(dirPathDest)
@@ -31,8 +32,12 @@ def updateDir():
     abslotelyPath = os.getcwd()
     print "当前路径:"+abslotelyPath
 
+fileCount = 0
+
 def anylizeFile():
     updateDir()
+
+    global fileCount
 
     for csd in csdList:
         #首先拷贝csd文件
@@ -43,8 +48,10 @@ def anylizeFile():
         except IOError:
             print "Error: 没有找到:" + csd
         else:
-            print "找到文件并转移成功:" + csd
+            fileCount += 1
+            # print "找到文件并转移成功:" + csd
 
+        #处理png图片
         for line in file_object:
             content = line.find(".png")
             if content != -1:
@@ -77,15 +84,17 @@ def anylizeFile():
                         except IOError:
                             print "Error: 没有找到:"+strContent
                         else:
-                            print "找到文件并转移成功:"+strContent
-                            # print "strContent:" + strContent
+                            fileCount += 1
+                            # print "找到文件并转移成功:"+strContent
 
+        #处理字体文件
 
     #完成后打开指定路径
     if os.path.isdir(dirPathDest):
         os.chmod(dirPathDest, stat.S_IRWXU)
         os.startfile(dirPathDest)
 
+    print "共处理文件数量:"+str(fileCount)
 
 
 anylizeFile()
