@@ -13,23 +13,31 @@ import time
 import shutil
 # from shutil import copy
 import os.path
+import stat
 
-def anylizeFile():
-    dirPathDest = "tempFile/"
+
+csdList = ['ClubDetailMsg.csd', 'ClubPopUpMsg.csd', 'ClubRank.csd', 'InputClubIdPanel.csd', 'culbRoomInfo.csd', 'culbInfo.csd']
+dirPathDest = "tempFile"
+
+def updateDir():
+    #清理目录
     if os.path.exists(dirPathDest):
         shutil.rmtree(dirPathDest)
 
-    csdList = ['ClubDetailMsg.csd', 'ClubPopUpMsg.csd', 'ClubRank.csd', 'InputClubIdPanel.csd', 'culbRoomInfo.csd', 'culbInfo.csd']
-    # csdList = ['culbRoomInfo.csd']
+    #新建目录
+    if not os.path.exists(dirPathDest):
+        os.makedirs(dirPathDest)
+
+    abslotelyPath = os.getcwd()
+    print "当前路径:"+abslotelyPath
+
+def anylizeFile():
+    updateDir()
 
     for csd in csdList:
-
         #首先拷贝csd文件
-        print csd
-        if not os.path.exists("tempFile/"):
-            os.makedirs("tempFile/")
-        shutil.copy(csd, "tempFile/")
-
+        # print csd
+        shutil.copy(csd, dirPathDest)
         file_object = open(csd, 'rb')
         for line in file_object:
             content = line.find(".png")
@@ -47,25 +55,31 @@ def anylizeFile():
                 # print dirName
 
                 #创建临时目录存放png文件
-                dirPathDest = "tempFile/"
+                dirPathDestTemp = "tempFile/"
                 for dir in dirName:
                     if dir.find(".png") == -1:
-                        dirPathDest = dirPathDest + dir
-                        if not os.path.exists(dirPathDest):
+                        dirPathDestTemp = dirPathDestTemp + dir
+                        if not os.path.exists(dirPathDestTemp):
                             # print("该目录当前不存在")
-                            os.makedirs(dirPathDest)
+                            os.makedirs(dirPathDestTemp)
 
                         print strContent
-                        # print dirPathDest
+                        # print dirPathDestTemp
                         # 拷贝csd文件中用到的图片到临时目录
                         try:
-                            shutil.copy(strContent, dirPathDest)
+                            shutil.copy(strContent, dirPathDestTemp)
                         except IOError:
                             print "Error: 没有找到文件或读取文件失败"
                         else:
                             print "内容写入文件成功"
-
                             # print "strContent:" + strContent
+
+
+    #完成后打开指定路径
+    if os.path.isdir(dirPathDest):
+        os.chmod(dirPathDest, stat.S_IRWXU)
+        os.startfile(dirPathDest)
+
 
 anylizeFile()
 
