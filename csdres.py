@@ -98,4 +98,4 @@ def anylizeFile():
 
     print "共处理文件数量:"+str(fileCount)
 
-
+anylizeFile()
