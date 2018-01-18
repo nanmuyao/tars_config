@@ -5,12 +5,10 @@
 #次脚本中没有拷贝csd文件使用的字体文件
 #此脚本用于处理多工程公用一套资源的情况
 #具体把公用的资源文件拷贝到指定的目录中 包括csd,png 暂时没有处理字体文件
-#次脚本功能再是不完善
-#严重bug
-#当资源目录存在多级目录结构的状态下,不能正确处理资源
+#次脚本功能暂时还不完善
 
 import re
-import os
+import os1
 import time
 import shutil
 # from shutil import copy
@@ -19,6 +17,7 @@ import stat
 
 
 csdList = ['ClubDetailMsg.csd', 'ClubPopUpMsg.csd', 'ClubRank.csd', 'InputClubIdPanel.csd', 'culbRoomInfo.csd', 'culbInfo.csd']
+# csdList = ['Play1.csd']
 dirPathDest = "tempFile"
 
 def updateDir():
@@ -73,21 +72,22 @@ def anylizeFile():
                 dirPathDestTemp = "tempFile/"
                 for dir in dirName:
                     if dir.find(".png") == -1:
-                        dirPathDestTemp = dirPathDestTemp + dir
-                        if not os.path.exists(dirPathDestTemp):
-                            # print("该目录当前不存在")
-                            os.makedirs(dirPathDestTemp)
+                        dirPathDestTemp = dirPathDestTemp + dir + "/"
 
-                        # print strContent
-                        # print dirPathDestTemp
-                        # 拷贝csd文件中用到的图片到临时目录
-                        try:
-                            shutil.copy(strContent, dirPathDestTemp)
-                        except IOError:
-                            print "Error: 没有找到:"+strContent
-                        else:
-                            fileCount += 1
-                            # print "找到文件并转移成功:"+strContent
+                print "strContent", strContent
+                print "dirPathDestTemp", dirPathDestTemp
+                if not os.path.exists(dirPathDestTemp):
+                    # print("该目录当前不存在")
+                    os.makedirs(dirPathDestTemp)
+
+                #拷贝csd文件中用到的图片到临时目录
+                try:
+                    shutil.copy(strContent, dirPathDestTemp)
+                except IOError:
+                    print "Error: 没有找到:"+strContent
+                else:
+                    fileCount += 1
+                    # print "找到文件并转移成功:"+strContent
 
         #处理字体文件
 
@@ -98,6 +98,4 @@ def anylizeFile():
 
     print "共处理文件数量:"+str(fileCount)
 
-
-anylizeFile()
 
