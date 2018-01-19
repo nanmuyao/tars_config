@@ -5,10 +5,9 @@
 #次脚本中没有拷贝csd文件使用的字体文件
 #此脚本用于处理多工程公用一套资源的情况
 #具体把公用的资源文件拷贝到指定的目录中 包括csd,png 暂时没有处理字体文件
-#次脚本功能暂时还不完善
 
 import re
-import os1
+import os
 import time
 import shutil
 # from shutil import copy
@@ -16,8 +15,8 @@ import os.path
 import stat
 
 
-csdList = ['ClubDetailMsg.csd', 'ClubPopUpMsg.csd', 'ClubRank.csd', 'InputClubIdPanel.csd', 'culbRoomInfo.csd', 'culbInfo.csd']
-# csdList = ['Play1.csd']
+# csdList = ['ClubDetailMsg.csd', 'ClubPopUpMsg.csd', 'ClubRank.csd', 'InputClubIdPanel.csd', 'culbRoomInfo.csd', 'culbInfo.csd']
+csdList = ['Play1.csd']
 dirPathDest = "tempFile"
 
 def updateDir():
@@ -35,14 +34,86 @@ def updateDir():
 
 fileCount = 0
 
+#处理字体文件
+def delZiTi(file_object):
+    print "处理字体文件"
+    global fileCount
+    for line in file_object:
+        content = line.find(".ttf")
+        if content != -1:
+            print line
+            strStart = line.find("Path=")
+            strEnd = line.find('.ttf')
+            # print strStart, strEnd
+
+            strContent = line[strStart + 6 : strEnd + 4]
+            # print strContent
+
+            #提取文件夹名称
+            dirName = strContent.split('/')
+            # print dirName
+
+            #创建临时目录存放png文件
+            dirPathDestTemp = "tempFile/"
+            for dir in dirName:
+                if dir.find(".ttf") == -1:
+                    dirPathDestTemp = dirPathDestTemp + dir + "/"
+
+            print "strContent", strContent
+            print "dirPathDestTemp", dirPathDestTemp
+            if not os.path.exists(dirPathDestTemp):
+                # print("该目录当前不存在")
+                os.makedirs(dirPathDestTemp)
+
+            #拷贝csd文件中用到的图片到临时目录
+            try:
+                shutil.copy(strContent, dirPathDestTemp)
+            except IOError:
+                print "Error: 没有找到:"+strContent
+            else:
+                fileCount += 1
+                # print "找到文件并转移成功:"+strContent
+
+#处理Pic图片
+def dealPic(file_object):
+    print "处理Pic图片"
+    global fileCount
+    for line in file_object:
+        content = line.find(".png")
+        if content != -1:
+            strStart = line.find("Path=")
+            strEnd = line.find('.png')
+
+            strContent = line[strStart + 6: strEnd + 4]
+
+            # 提取文件夹名称
+            dirName = strContent.split('/')
+
+            # 创建临时目录存放png文件
+            dirPathDestTemp = "tempFile/"
+            for dir in dirName:
+                if dir.find(".png") == -1:
+                    dirPathDestTemp = dirPathDestTemp + dir + "/"
+
+            # print "strContent", strContent
+            # print "dirPathDestTemp", dirPathDestTemp
+            if not os.path.exists(dirPathDestTemp):
+                # print("该目录当前不存在")
+                os.makedirs(dirPathDestTemp)
+
+            # 拷贝csd文件中用到的图片到临时目录
+            try:
+                shutil.copy(strContent, dirPathDestTemp)
+            except IOError:
+                print "Error: 没有找到:" + strContent
+            else:
+                fileCount += 1
+                # print "找到文件并转移成功:"+strContent
+
 def anylizeFile():
     updateDir()
-
     global fileCount
-
     for csd in csdList:
-        #首先拷贝csd文件
-        # print csd
         try:
             shutil.copy(csd, dirPathDest)
             file_object = open(csd, 'rb')
@@ -51,45 +122,9 @@ def anylizeFile():
         else:
             fileCount += 1
             # print "找到文件并转移成功:" + csd
-
-        #处理png图片
-        for line in file_object:
-            content = line.find(".png")
-            if content != -1:
-                # print line
-                strStart = line.find("Path=")
-                strEnd = line.find('.png')
-                # print strStart, strEnd
-
-                strContent = line[strStart + 6 : strEnd + 4]
-                # print strContent
-
-                #提取文件夹名称
-                dirName = strContent.split('/')
-                # print dirName
-
-                #创建临时目录存放png文件
-                dirPathDestTemp = "tempFile/"
-                for dir in dirName:
-                    if dir.find(".png") == -1:
-                        dirPathDestTemp = dirPathDestTemp + dir + "/"
-
-                print "strContent", strContent
-                print "dirPathDestTemp", dirPathDestTemp
-                if not os.path.exists(dirPathDestTemp):
-                    # print("该目录当前不存在")
-                    os.makedirs(dirPathDestTemp)
-
-                #拷贝csd文件中用到的图片到临时目录
-                try:
-                    shutil.copy(strContent, dirPathDestTemp)
-                except IOError:
-                    print "Error: 没有找到:"+strContent
-                else:
-                    fileCount += 1
-                    # print "找到文件并转移成功:"+strContent
-
-        #处理字体文件
+            #这里为什么file_object不能连续给两个函数去使用呢?
+            # delZiTi(file_object.read())
+            dealPic(file_object)
 
     #完成后打开指定路径
     if os.path.isdir(dirPathDest):
@@ -98,4 +133,7 @@ def anylizeFile():
 
     print "共处理文件数量:"+str(fileCount)
 
+
 anylizeFile()
+
+
