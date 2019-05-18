@@ -1,0 +1,338 @@
+ tars  ~  cat ~/.vimrc
+set nu
+set relativenumber
+syntax on
+set clipboard=unnamed
+set backspace=2
+set nocompatible              " be iMproved, required
+filetype off                  " required
+set scrolloff=4        "距离顶部和底部3行"
+set clipboard=unnamed
+set mouse=a
+set tags=tags
+set tags=./tags;,tag
+set autochdir
+set autoread
+
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+" alternatively, pass a path where Vundle should install plugins
+"call vundle#begin('~/some/path/here')
+
+" let Vundle manage Vundle, required
+Plugin 'VundleVim/Vundle.vim'
+Plugin 'Valloric/YouCompleteMe'
+Plugin 'scrooloose/nerdtree'
+Plugin 'Xuyuanp/nerdtree-git-plugin'
+Plugin 'majutsushi/tagbar'
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
+Plugin 'kien/ctrlp.vim'
+Plugin 'vim-scripts/indentpython.vim'
+Plugin 'Vimjas/vim-python-pep8-indent'
+Plugin 'tell-k/vim-autopep8'
+Plugin 'Yggdroot/indentLine'
+Plugin 'Raimondi/delimitMate'
+Plugin 'Shougo/deoplete.nvim', {'do': ':UpdateRemotePlugins'}
+Plugin 'scrooloose/nerdcommenter'
+Plugin 'skywind3000/asyncrun.vim'
+Plugin 'dyng/ctrlsf.vim'
+Plugin 'tmhedberg/SimpylFold'
+Plugin 'jnurmine/Zenburn'
+"Plugin 'altercation/vim-colors-solarized'
+"Plugin 'vim-syntastic/syntastic'
+
+call vundle#end()            " required
+filetype plugin indent on    " required
+
+let g:pymode_python = 'python3'
+"au BufNewFile,BufRead *.py
+
+set splitbelow
+set splitright
+"快捷键，ctrl+l切换到左边布局，ctrl+h切换到右边布局
+"ctrl+k切换到上面布局，ctrl+j切换到下面布局
+nnoremap <C-J> <C-W><C-J>
+nnoremap <C-K> <C-W><C-K>
+nnoremap <C-L> <C-W><C-L>
+nnoremap <C-H> <C-W><C-H>
+
+
+" 开启代码折叠功能
+" 根据当前代码行的缩进来进行代码折叠
+set foldmethod=indent
+set foldlevel=99
+
+" 将za快捷键映射到space空格键上
+nnoremap <space> za
+let g:SimpylFold_docstring_preview = 1
+
+" *********************************************
+" NERD插件属性
+" *********************************************
+au vimenter * NERDTree   // 开启vim的时候默认开启NERDTree
+map <F2> :NERDTreeToggle<CR>  // 设置F2为开启NERDTree的快捷键
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+
+let g:tagbar_auto_faocus =1
+" 启动指定文件时自动开启tagbar
+"autocmd BufReadPost *.cpp,*.c,*.h,*.hpp,*.cc,*.cxx,*.py call tagbar#autoopen()
+nmap <F8> :TagbarToggle<CR>
+
+" *********************************************
+" vim-airline
+" *********************************************
+" 开启powerline字体
+let g:airline_powerline_fonts = 1
+" 使用powerline包装过的字体
+set guifont=Source\ Code\ Pro\ for\ Powerline:h14
+
+" *********************************************
+" ctrlp
+" *********************************************
+let g:ctrlp_map = '<c-p>'
+let g:ctrlp_cmd = 'CtrlP'
+" 设置过滤不进行查找的后缀名
+let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn|pyc)$'
+
+" *********************************************
+" python代码风格PEP8
+" *********************************************
+
+
+let g:autopep8_max_line_length=379
+"let g:autopep8_on_save = 1
+
+if has("autocmd")
+  au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+endif
+
+function! ClosePair(char)
+ if getline('.')[col('.') - 1] == a:char
+ return "\<Right>"
+ else
+ return a:char
+ endif
+endf
+
+function! CloseBracket()
+ if match(getline(line('.') + 1), '\s*}') < 0
+ return "\<CR>}"
+ else
+ return "\<Esc>j0f}a"
+ endif
+endf
+
+function! QuoteDelim(char)
+ let line = getline('.')
+ let col = col('.')
+ if line[col - 2] == "\\"
+ return a:char
+ elseif line[col - 1] == a:char
+ return "\<Right>"
+ else
+ return a:char.a:char."\<Esc>i"
+ endif
+endf
+
+"默认开启对齐线
+let g:indentLine_enabled = 1
+let g:indentLine_char = '¦'
+
+"YouCompleteme
+nnoremap <leader>gl :YcmCompleter GoToDeclaration<CR>
+nnoremap <leader>gf :YcmCompleter GoToDefinition<CR>
+nnoremap <leader>gg :YcmCompleter GoToDefinitionElseDeclaration<CR>
+let g:ycm_key_list_select_completion = ['<TAB>', '<c-n>', '<Down>']
+let g:ycm_key_list_previous_completion = ['<S-TAB>', '<c-p>', '<Up>']
+let g:ycm_auto_trigger = 1
+let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
+set completeopt=menu,menuone
+"看函数原型自动弹出窗口打乱布局
+let g:ycm_add_preview_to_completeopt = 0
+let g:ycm_collect_identifiers_from_tags_files = 1 " Let YCM read tags from Ctags file
+let g:ycm_use_ultisnips_completer = 1 " Default 1, just ensure
+let g:ycm_seed_identifiers_with_syntax = 1 " Completion for programming language's keyword
+let g:ycm_python_binary_path = 'python'
+
+let g:ycm_complete_in_comments = 1 " Completion in comments
+let g:ycm_complete_in_strings = 1 " Completion in string
+
+highlight PMenu ctermfg=0 ctermbg=242 guifg=black guibg=darkgrey
+highlight PMenuSel ctermfg=242 ctermbg=180 guifg=darkgrey guibg=black
+
+"对当前行的移动
+nnoremap <C-S-Up> ddp
+nnoremap <C-S-Down> ddn
+
+" Only do this part when compiled with support for autocommands.
+if has("autocmd")
+
+" Enable file type detection.
+" Use the default filetype settings, so that mail gets 'tw' set to 72,
+" 'cindent' is on in C files, etc.
+" Also load indent files, to automatically do language-dependent indenting.
+filetype plugin indent on
+
+" Put these in an autocmd group, so that we can delete them easily.
+augroup vimrcEx
+au!
+
+" For all text files set 'textwidth' to 78 characters.
+autocmd FileType text setlocal textwidth=78
+
+" When editing a file, always jump to the last known cursor position.
+" Don't do it when the position is invalid or when inside an event handler
+" (happens when dropping a file on gvim).
+" Also don't do it when the mark is in the first line, that is the default
+" position when opening a file.
+autocmd BufReadPost *
+    \ if line("'\"") > 1 && line("'\"") <= line("$") |
+    \   exe "normal! g`\"" |
+    \ endif
+
+augroup END
+
+else
+
+set autoindent   " always set autoindenting on
+
+endif " has("autocmd")
+
+"树形目录相关操作
+map <C-n> :NERDTreeToggle <CR>
+let NERDTreeShowHidden=1
+let g:NERDTreeShowIgnoredStatus = 1
+let g:nerdtree_tabs_open_on_console_startup=1
+let g:NERDTreeIndicatorMapCustom = {
+    \ "Modified"  : "✹",
+    \ "Staged"    : "✚",
+    \ "Untracked" : "✭",
+    \ "Renamed"   : "➜",
+    \ "Unmerged"  : "═",
+    \ "Deleted"   : "✖",
+    \ "Dirty"     : "✗",
+    \ "Clean"     : "✔︎",
+    \ 'Ignored'   : '☒',
+    \ "Unknown"   : "?"
+    \ }
+
+"o 打开关闭文件或目录
+"e 以文件管理的方式打开选中的目录
+"t 在标签页中打开
+"T 在标签页中打开，但光标仍然留在 NERDTree
+"r 刷新光标所在的目录
+"R 刷新当前根路径
+"X 收起所有目录
+"p 小写，跳转到光标所在的上一级路径
+"P 大写，跳转到当前根路径
+"J 到第一个节点
+"K 到最后一个节点
+"I 显示隐藏文件
+"m 显示文件操作菜单
+"C 将根路径设置为光标所在的目录
+"u 设置上级目录为根路径
+"ctrl + w + w 光标自动在左右侧窗口切换
+"ctrl + w + r 移动当前窗口的布局位置
+":tabc 关闭当前的 tab
+":tabo   关闭所有其他的 tab
+":tabp   前一个 tab
+":tabn   后一个 tab
+"gT      前一个 tab
+"gt      后一个 tab
+
+"<Leader>cc 注释
+"<leader>cm 只用一组符号注释
+"<leader>cA 在行尾添加注释
+"<leader>c$ /* 注释 */
+"<leader>cs /* 块注释 */
+"<leader>cy 注释并复制
+"<leader>c<space> 注释/取消注释
+"<leader>ca 切换　// 和 /* */
+"<leader>cu 取消注释
+
+
+"Errors 就可以在修复错误之后自动更新它的底部描述。
+"let g:syntastic_always_populate_loc_list = 1
+"以确保在你打开文件时 Syntastic 插件自动高亮显示错误。
+"let g:syntastic_check_on_open = 1
+
+" Quick run via <F5>
+nnoremap <F5> :call <SID>compile_and_run()<CR>
+
+function! s:compile_and_run()
+    exec 'w'
+    if &filetype == 'c'
+        exec "AsyncRun! gcc % -o %<; time ./%<"
+    elseif &filetype == 'cpp'
+       exec "AsyncRun! g++ -std=c++11 % -o %<; time ./%<"
+    elseif &filetype == 'java'
+       exec "AsyncRun! javac %; time java %<"
+    elseif &filetype == 'sh'
+       exec "AsyncRun! time bash %"
+    elseif &filetype == 'python'
+       exec "AsyncRun! time python %"
+    endif
+endfunction
+
+" augroup SPACEVIM_ASYNCRUN
+"     autocmd!
+"    " Automatically open the quickfix window
+"     autocmd User AsyncRunStart call asyncrun#quickfix_toggle(15, 1)
+" augroup END
+"
+" asyncrun now has an option for opening quickfix automatically
+let g:asyncrun_open = 15
+
+autocmd BufReadPost *
+    \ if line("'\"") > 1 && line("'\"") <= line("$") |
+    \   exe "normal! g`\"" |
+    \ endif
+
+"set cursorcolumn  "or set cuc 设置光标所在的列
+set cursorline    "or set cul 设置光标所在的行
+" cterm 表示原生vim设置央视, 设置为NONE表示可以自定义设置
+" red（红），white（白），black（黑），green（绿），yellow（黄），blue（蓝），purple（紫），
+" gray（灰），brown（棕），tan(褐色)，syan(青色)
+" 更多高亮颜色设置, 可以:h highlight 查看manual
+"highlight CursorLine   cterm=NONE ctermbg=blue ctermfg=NONE guibg=NONE guifg=NONE
+"highlight CursorColumn cterm=NONE ctermbg=blue ctermfg=NONE guibg=NONE guifg=NONE
+
+autocmd BufWritePost $MYVIMRC source $MYVIMRC
+
+let g:ctrlsf_ackprg = 'ack'
+set hlsearch
+set showtabline=2
+
+let g:ctrlsf_default_root = '/Users/tars/haobtc_websites/vendors/hydra'
+let g:ctrlsf_case_sensitive='no'
+"let g:ctrlsf_args_filetype=['python']
+"let g:ctrlsf_ignore_dir=['tags']
+
+nnoremap <C-f> :CtrlSF<Space>
+let g:ctrlsf_default_view_mode = 'compact'
+
+if has("autocmd")
+au BufReadPost * if line("`\"") > 1 && line("`\"") <= line("$") | exe "normal! g`\"" | endif
+" for simplicity, "  au BufReadPost * exe "normal! g`\"", is Okay.
+endif
+
+map <leader>jt  <Esc>:%!json_xs -f json -t json-pretty<CR>
+
+"python with virtualenv support
+"python3 << EOF
+"import os
+"import sys
+"if 'VIRTUAL_ENV' in os.environ:
+"  project_base_dir = os.environ['VIRTUAL_ENV']
+"  activate_this = os.path.join(project_base_dir, 'bin/activate_this.py')
+"  execfile(activate_this, dict(__file__=activate_this))
+"EOF
+
+
+"python3 << EOF
+"print(sys.path)
+"EOF
+ tars  ~ 
