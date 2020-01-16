@@ -1,4 +1,3 @@
- tars  ~  cat ~/.zshrc
 #If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 export PATH="$PATH:/Users/tars/Documents/workspace/phabricator/arcanist/bin/"
@@ -9,7 +8,8 @@ export ZSH=$HOME/.oh-my-zsh
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-ZSH_THEME="robbyrussell"
+# ZSH_THEME="robbyrussell"
+ZSH_THEME="gallois"
 
 # Set list of themes to load
 # Setting this variable when ZSH_THEME=random
@@ -101,26 +101,26 @@ source $ZSH/oh-my-zsh.sh
 
 source ~/.bash_profile
 
-alias proxy='export all_proxy=http://127.0.0.1:8087'
-alias unproxy='unset all_proxy'
+#alias proxy='export all_proxy=http://127.0.0.1:8087'
+#alias unproxy='unset all_proxy'
 
-#export ALL_PROXY=socks5://127.0.0.1:1086
-#alias proxy='export all_proxy=socks5://127.0.0.1:1086'
+#export ALL_PROXY='socks5://127.0.0.1:1089'
+alias proxy='export all_proxy=socks5://127.0.0.1:1086'
+alias unproxy='unset all_proxy'
 
 export PATH="/usr/local/opt/gettext/bin:$PATH"
 export PATH="/usr/local/sbin:$PATH"
 
-. /usr/local/lib/python2.7/site-packages/powerline/bindings/zsh/powerline.zsh
+#. /usr/local/lib/python2.7/site-packages/powerline/bindings/zsh/powerline.zsh
 #open ~/.zshrc
 
-pyclean () {
-    find . -type f -name "*.py[co]" -delete
-    find . -type d -name "__pycache__" -delete
-}
+#pyclean () {
+#    find . -type f -name "*.py[co]" -delete
+#    find . -type d -name "__pycache__" -delete
+#}
 
 set autoread
 
 alias txat='tmux attach-session -t'
 alias txls='tmux ls'
 alias txnt='tmux new-session -s'
- tars  ~ 
