@@ -10,10 +10,13 @@ set clipboard=unnamed
 set mouse=a
 set tags=tags
 set tags=./tags;,tag
+set tags+=~/.cache/tags/django_tags.tags
+"set tags+=~/.cache/tags/pylibs.tags
 set tags+=tags
-set tags+=~/.cache/tags/pylibs.tags
-set autochdir
+"set autochdir
 set autoread
+set ts=4
+set expandtab
 
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
@@ -41,11 +44,13 @@ Plugin 'skywind3000/asyncrun.vim'
 Plugin 'dyng/ctrlsf.vim'
 Plugin 'tmhedberg/SimpylFold'
 Plugin 'jnurmine/Zenburn'
-Plugin 'ludovicchabant/vim-gutentags'
+"Plugin 'ludovicchabant/vim-gutentags'
 Plugin 'sukima/xmledit'
+Plugin 'Yggdroot/LeaderF', { 'do': './install.sh' }
+Plugin 'python-mode/python-mode'
 
-"Plugin 'altercation/vim-colors-solarized'
-"Plugin 'vim-syntastic/syntastic'
+Plugin 'altercation/vim-colors-solarized'
+Plugin 'dense-analysis/ale'
 
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -159,7 +164,7 @@ let g:ycm_add_preview_to_completeopt = 1
 let g:ycm_collect_identifiers_from_tags_files = 1 " Let YCM read tags from Ctags file
 let g:ycm_use_ultisnips_completer = 1 " Default 1, just ensure
 let g:ycm_seed_identifiers_with_syntax = 1 " Completion for programming language's keyword
-let g:ycm_python_binary_path = 'python'
+"let g:ycm_python_binary_path = 'python'
 
 let g:ycm_complete_in_comments = 1 " Completion in comments
 let g:ycm_complete_in_strings = 1 " Completion in string
@@ -185,7 +190,7 @@ augroup vimrcEx
 au!
 
 " For all text files set 'textwidth' to 78 characters.
-autocmd FileType text setlocal textwidth=78
+autocmd FileType text setlocal textwidth=textwidth256
 
 " When editing a file, always jump to the last known cursor position.
 " Don't do it when the position is invalid or when inside an event handler
@@ -258,10 +263,46 @@ let g:NERDTreeIndicatorMapCustom = {
 "<leader>cu 取消注释
 
 
+"python-syanstic 插件配置
 "Errors 就可以在修复错误之后自动更新它的底部描述。
-"let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_always_populate_loc_list = 1
 "以确保在你打开文件时 Syntastic 插件自动高亮显示错误。
-"let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_enable_signs = 1
+let g:syntastic_error_symbol='✗'
+let g:syntastic_warning_symbol='►'
+"高亮错误
+let g:syntastic_enable_highlighting=1
+let g:pymode_options_max_line_length=240
+
+"ale
+"始终开启标志列
+let g:ale_sign_column_always = 1
+let g:ale_set_highlights = 0
+"自定义error和warning图标
+let g:ale_sign_error = '✗'
+let g:ale_sign_warning = '⚡'
+"在vim自带的状态栏中整合ale
+let g:ale_statusline_format = ['✗ %d', '⚡ %d', '✔ OK']
+"显示Linter名称,出错或警告等相关信息
+let g:ale_echo_msg_error_str = 'E'
+let g:ale_echo_msg_warning_str = 'W'
+let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+"普通模式下，sp前往上一个错误或警告，sn前往下一个错误或警告
+nmap sp <Plug>(ale_previous_wrap)
+nmap sn <Plug>(ale_next_wrap)
+"<Leader>s触发/关闭语法检
+nmap <Leader>s :ALEToggle<CR>
+"<Leader>d查看错误或警告的详细信息
+nmap <Leader>d :ALEDetail<CR>
+"run linters only when I save files
+" Write this in your vimrc file
+let g:ale_lint_on_text_changed = 'never'
+let g:ale_lint_on_insert_leave = 0
+" You can disable this option too
+" if you don't want linters to run on opening a file
+let g:ale_lint_on_enter = 0
+
 
 " Quick run via <F5>
 nnoremap <F5> :call <SID>compile_and_run()<CR>
@@ -326,7 +367,7 @@ endif
 map <leader>jt  <Esc>:%!json_xs -f json -t json-pretty<CR>
 
 "python with virtualenv support
-"python3 << EOF
+"python << EOF
 "import os
 "import sys
 "if 'VIRTUAL_ENV' in os.environ:
